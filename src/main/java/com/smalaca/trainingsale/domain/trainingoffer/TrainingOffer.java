@@ -3,15 +3,30 @@ package com.smalaca.trainingsale.domain.trainingoffer;
 import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
 
+import java.util.UUID;
+
 @AggregateRoot
 public class TrainingOffer {
-    private final ReservationList reservationList = new ReservationList();
-    private final TrainingGroup trainingGroup = new TrainingGroup();
+    private final UUID trainingOfferId;
+    private final ReservationList reservationList;
+    private final TrainingGroup trainingGroup;
     private boolean isFinalized;
+
+    TrainingOffer(UUID trainingOfferId, ReservationList reservationList, TrainingGroup trainingGroup) {
+        this.trainingOfferId = trainingOfferId;
+        this.reservationList = reservationList;
+        this.trainingGroup = trainingGroup;
+    }
 
     @PrimaryPort
     public void choose(Participant participant) {
-        reservationList.add(participant);
+        if (isOfferOpen()) {
+            if (trainingGroup.hasAvailablePlaces()) {
+                reservationList.add(participant);
+            }
+        } else {
+            throw new ClosedTrainingOfferException(trainingOfferId);
+        }
     }
 
     @PrimaryPort
@@ -32,6 +47,12 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void start() {
-        isFinalized = true;
+        if (!isOfferOpen()) {
+            isFinalized = true;
+        }
+    }
+
+    private boolean isOfferOpen() {
+        return false;
     }
 }

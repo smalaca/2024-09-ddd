@@ -7,7 +7,12 @@ import java.util.List;
 
 @DomainEntity
 class TrainingGroup {
+    private final int maxParticipantsNumber;
     private final List<Participant> participants = new ArrayList<>();
+
+    TrainingGroup(int maxParticipantsNumber) {
+        this.maxParticipantsNumber = maxParticipantsNumber;
+    }
 
     void add(Participant participant) {
         participants.add(participant);
@@ -23,5 +28,9 @@ class TrainingGroup {
                 .filter(existing -> existing.isSameAs(participant))
                 .findFirst()
                 .get();
+    }
+
+    boolean hasAvailablePlaces() {
+        return participants.size() < maxParticipantsNumber;
     }
 }
