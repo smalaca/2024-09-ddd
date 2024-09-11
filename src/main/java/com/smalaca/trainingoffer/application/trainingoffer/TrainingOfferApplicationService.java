@@ -13,9 +13,11 @@ import java.util.UUID;
 @Service
 public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
+    private final TrainingOfferFactory trainingOfferFactory;
 
-    TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository) {
+    TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository, TrainingOfferFactory trainingOfferFactory) {
         this.trainingOfferRepository = trainingOfferRepository;
+        this.trainingOfferFactory = trainingOfferFactory;
     }
 
     @Transactional
@@ -25,7 +27,7 @@ public class TrainingOfferApplicationService {
         CreateTrainingOfferCommand command = dto.asCreateTrainingOfferCommand();
 
         // 2. wywołanie metody z domeny: 1
-        TrainingOffer trainingOffer = new TrainingOfferFactory().create(command);
+        TrainingOffer trainingOffer = trainingOfferFactory.create(command);
 
         // 3. zapisanie wyników: 1 ... *
         return trainingOfferRepository.save(trainingOffer);
