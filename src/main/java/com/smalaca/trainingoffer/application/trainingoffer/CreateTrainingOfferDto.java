@@ -16,7 +16,7 @@ public record CreateTrainingOfferDto(
         return new CreateTrainingOfferCommand(
                 trainerId,
                 trainingProgramId,
-                new Period(startDate, endDate),
+                Period.of(startDate, endDate),
                 Price.of(price),
                 new GroupSize(groupSize),
                 Location.valueOf(location));
