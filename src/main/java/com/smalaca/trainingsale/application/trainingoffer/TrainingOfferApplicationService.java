@@ -2,6 +2,7 @@ package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
+import com.smalaca.trainingsale.domain.payment.PaymentService;
 import com.smalaca.trainingsale.domain.trainingoffer.Participant;
 import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
@@ -14,10 +15,13 @@ import java.util.UUID;
 public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
     private final EventPublisher eventPublisher;
+    private final PaymentService paymentService;
 
-    public TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository, EventPublisher eventPublisher) {
+    public TrainingOfferApplicationService(
+            TrainingOfferRepository trainingOfferRepository, EventPublisher eventPublisher, PaymentService paymentService) {
         this.trainingOfferRepository = trainingOfferRepository;
         this.eventPublisher = eventPublisher;
+        this.paymentService = paymentService;
     }
 
     @PrimaryAdapter
@@ -36,7 +40,7 @@ public class TrainingOfferApplicationService {
         Participant participant = new Participant(dto.firstName(), dto.lastName());
         PaymentMethod paymentMethod = PaymentMethod.of(dto.paymentMethod());
 
-        trainingOffer.buy(participant, paymentMethod);
+        trainingOffer.buy(participant, paymentMethod, paymentService);
 
         trainingOfferRepository.update(trainingOffer);
     }
