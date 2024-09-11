@@ -6,5 +6,5 @@ import java.util.UUID;
 
 @SecondaryPort
 public interface TrainingProgramService {
-    boolean exists(UUID uuid);
+    boolean doesNotExist(UUID uuid);
 }
