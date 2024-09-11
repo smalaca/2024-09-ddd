@@ -25,6 +25,8 @@ public class TrainingOffer {
                 trainingGroup.book(participant);
             } else if (reservationList.hasAvailablePlaces()) {
                 reservationList.add(participant);
+            } else {
+                throw new NoAvailablePlacesLeftException(trainingOfferId);
             }
         } else {
             throw new ClosedTrainingOfferException(trainingOfferId);
