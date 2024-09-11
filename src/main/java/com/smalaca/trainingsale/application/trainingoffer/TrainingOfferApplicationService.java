@@ -1,6 +1,7 @@
 package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
+import com.smalaca.trainingsale.domain.trainingoffer.Participant;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOfferRepository;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,11 @@ public class TrainingOfferApplicationService {
     }
 
     @PrimaryAdapter
-    public void choose(UUID id) {
-        TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
+    public void choose(ChooseTrainingOfferDto dto) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
+        Participant participant = dto.participant();
 
-        trainingOffer.choose();
+        trainingOffer.choose(participant);
 
         trainingOfferRepository.update(trainingOffer);
     }
