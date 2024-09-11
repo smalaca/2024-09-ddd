@@ -31,7 +31,7 @@ public class TrainingOfferApplicationService {
     public void buy(BuyTrainingOfferDto dto) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
         Participant participant = new Participant(dto.firstName(), dto.lastName());
-        PaymentMethod paymentMethod = PaymentMethod.valueOf(dto.paymentMethod());
+        PaymentMethod paymentMethod = PaymentMethod.of(dto.paymentMethod());
 
         trainingOffer.buy(participant, paymentMethod);
 
