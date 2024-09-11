@@ -39,8 +39,13 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void resign() {
+    public void resign(ParticipantName participantName) {
+        Participant found = participants.stream()
+                .filter(participant -> participant.hasName(participantName))
+                .findFirst()
+                .get();
 
+        participants.add(found);
     }
 
     @PrimaryPort

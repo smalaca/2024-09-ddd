@@ -50,10 +50,11 @@ public class TrainingOfferApplicationService {
     }
 
     @PrimaryAdapter
-    public void resign(UUID id) {
-        TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
+    public void resign(ResignFromTrainingDto dto) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
+        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
 
-        trainingOffer.resign();
+        trainingOffer.resign(participantName);
 
         trainingOfferRepository.update(trainingOffer);
     }
