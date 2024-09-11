@@ -35,7 +35,11 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void buy(Participant participant, PaymentMethod paymentMethod) {
-        trainingGroup.confirm(participant);
+        if (isOfferOpen()) {
+            trainingGroup.confirm(participant);
+        } else {
+            throw new ClosedTrainingOfferException(trainingOfferId);
+        }
     }
 
     @PrimaryPort

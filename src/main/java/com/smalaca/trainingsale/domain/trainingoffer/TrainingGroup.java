@@ -44,8 +44,16 @@ class TrainingGroup {
     }
 
     void confirm(Participant participant) {
-        bookings.remove(participant);
-        participants.add(participant);
+        if (hasBookingFor(participant)) {
+            bookings.remove(participant);
+            participants.add(participant);
+        } else {
+            throw new MissingBookingException(participant);
+        }
+    }
+
+    private boolean hasBookingFor(Participant participant) {
+        return participants.stream().anyMatch(existing -> existing.isSameAs(participant));
     }
 
     void resign(Participant participant) {
