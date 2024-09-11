@@ -2,7 +2,6 @@ package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
 import com.smalaca.trainingsale.domain.trainingoffer.Participant;
-import com.smalaca.trainingsale.domain.trainingoffer.ParticipantName;
 import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOfferRepository;
@@ -21,7 +20,7 @@ public class TrainingOfferApplicationService {
     @PrimaryAdapter
     public void choose(ChooseTrainingOfferDto dto) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
-        Participant participant = dto.participant();
+        Participant participant = new Participant(dto.firstName(), dto.lastName());
 
         trainingOffer.choose(participant);
 
@@ -31,10 +30,10 @@ public class TrainingOfferApplicationService {
     @PrimaryAdapter
     public void buy(BuyTrainingOfferDto dto) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
-        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
+        Participant participant = new Participant(dto.firstName(), dto.lastName());
         PaymentMethod paymentMethod = PaymentMethod.valueOf(dto.paymentMethod());
 
-        trainingOffer.buy(participantName, paymentMethod);
+        trainingOffer.buy(participant, paymentMethod);
 
         trainingOfferRepository.update(trainingOffer);
     }
@@ -42,9 +41,9 @@ public class TrainingOfferApplicationService {
     @PrimaryAdapter
     public void cancelReservation(CancelReservationDto dto) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
-        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
+        Participant participant = new Participant(dto.firstName(), dto.lastName());
 
-        trainingOffer.cancelReservation(participantName);
+        trainingOffer.cancelReservation(participant);
 
         trainingOfferRepository.update(trainingOffer);
     }
@@ -52,9 +51,9 @@ public class TrainingOfferApplicationService {
     @PrimaryAdapter
     public void resign(ResignFromTrainingDto dto) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
-        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
+        Participant participant = new Participant(dto.firstName(), dto.lastName());
 
-        trainingOffer.resign(participantName);
+        trainingOffer.resign(participant);
 
         trainingOfferRepository.update(trainingOffer);
     }

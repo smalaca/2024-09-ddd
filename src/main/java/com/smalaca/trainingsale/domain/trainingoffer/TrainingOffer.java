@@ -18,30 +18,30 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void buy(ParticipantName participantName, PaymentMethod paymentMethod) {
-        Participant participant = findReservation(participantName);
+    public void buy(Participant participant, PaymentMethod paymentMethod) {
+        Participant existing = findReservation(participant);
 
-        reservations.remove(participant);
-        participants.add(participant);
+        reservations.remove(existing);
+        participants.add(existing);
     }
 
     @PrimaryPort
-    public void cancelReservation(ParticipantName participantName) {
-        Participant participant = findReservation(participantName);
-        reservations.remove(participant);
+    public void cancelReservation(Participant participant) {
+        Participant found = findReservation(participant);
+        reservations.remove(found);
     }
 
-    private Participant findReservation(ParticipantName participantName) {
+    private Participant findReservation(Participant participant) {
         return reservations.stream()
-                .filter(participant -> participant.hasName(participantName))
+                .filter(existing -> existing.isSameAs(participant))
                 .findFirst()
                 .get();
     }
 
     @PrimaryPort
-    public void resign(ParticipantName participantName) {
+    public void resign(Participant participant) {
         Participant found = participants.stream()
-                .filter(participant -> participant.hasName(participantName))
+                .filter(existing -> existing.isSameAs(participant))
                 .findFirst()
                 .get();
 

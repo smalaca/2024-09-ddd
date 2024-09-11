@@ -1,24 +1,18 @@
 package com.smalaca.trainingsale.domain.trainingoffer;
 
 import com.smalaca.annotation.ddd.DomainEntity;
-import com.smalaca.annotation.ddd.Factory;
 
 @DomainEntity
 public class Participant {
-    private final ParticipantName participantName;
-    private final PhoneNumber phoneNumber;
+    private final String firstName;
+    private final String lastName;
 
-    private Participant(ParticipantName participantName, PhoneNumber phoneNumber) {
-        this.participantName = participantName;
-        this.phoneNumber = phoneNumber;
+    public Participant(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    @Factory
-    public static Participant of(String firstName, String lastName, String phoneNumber) {
-        return new Participant(new ParticipantName(firstName, lastName), new PhoneNumber(phoneNumber));
-    }
-
-    boolean hasName(ParticipantName participantName) {
-        return this.participantName.sameAs(participantName);
+    boolean isSameAs(Participant participant) {
+        return firstName.equals(participant.firstName) && lastName.equals(participant.lastName);
     }
 }
