@@ -2,6 +2,8 @@ package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
 import com.smalaca.trainingsale.domain.trainingoffer.Participant;
+import com.smalaca.trainingsale.domain.trainingoffer.ParticipantName;
+import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOfferRepository;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,12 @@ public class TrainingOfferApplicationService {
     }
 
     @PrimaryAdapter
-    public void buy(UUID id) {
-        TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
+    public void buy(BuyTrainingOfferDto dto) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
+        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
+        PaymentMethod paymentMethod = PaymentMethod.valueOf(dto.paymentMethod());
 
-        trainingOffer.buy();
+        trainingOffer.buy(participantName, paymentMethod);
 
         trainingOfferRepository.update(trainingOffer);
     }

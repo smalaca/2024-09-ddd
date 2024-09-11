@@ -9,6 +9,7 @@ import java.util.List;
 @AggregateRoot
 public class TrainingOffer {
     private final List<Participant> reservations = new ArrayList<>();
+    private final List<Participant> participants = new ArrayList<>();
 
     @PrimaryPort
     public void choose(Participant participant) {
@@ -16,7 +17,14 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void buy() {
+    public void buy(ParticipantName participantName, PaymentMethod paymentMethod) {
+        Participant found = reservations.stream()
+                .filter(participant -> participant.hasName(participantName))
+                .findFirst()
+                .get();
+
+        reservations.remove(found);
+        participants.add(found);
     }
 
     @PrimaryPort
