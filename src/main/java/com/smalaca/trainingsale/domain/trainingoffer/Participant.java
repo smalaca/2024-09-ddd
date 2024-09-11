@@ -1,8 +1,8 @@
 package com.smalaca.trainingsale.domain.trainingoffer;
 
-import com.smalaca.annotation.ddd.DomainEntity;
+import com.smalaca.annotation.ddd.ValueObject;
 
-@DomainEntity
+@ValueObject
 public class Participant {
     private final String firstName;
     private final String lastName;
