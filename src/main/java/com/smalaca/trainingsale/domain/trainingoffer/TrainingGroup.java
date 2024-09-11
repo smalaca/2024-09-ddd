@@ -15,22 +15,6 @@ class TrainingGroup {
         this.maxParticipantsNumber = maxParticipantsNumber;
     }
 
-    void add(Participant participant) {
-        participants.add(participant);
-    }
-
-    void remove(Participant participant) {
-        Participant existing = find(participant);
-        participants.remove(existing);
-    }
-
-    private Participant find(Participant participant) {
-        return participants.stream()
-                .filter(existing -> existing.isSameAs(participant))
-                .findFirst()
-                .get();
-    }
-
     boolean hasAvailablePlaces() {
         return (bookings.size() + participants.size()) < maxParticipantsNumber;
     }
