@@ -1,6 +1,7 @@
 package com.smalaca.trainingoffer.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
+import com.smalaca.trainingoffer.domain.eventpublished.EventPublisher;
 import com.smalaca.trainingoffer.domain.trainingoffer.CreateTrainingOfferCommand;
 import com.smalaca.trainingoffer.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingoffer.domain.trainingoffer.TrainingOfferFactory;
@@ -14,10 +15,13 @@ import java.util.UUID;
 public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
     private final TrainingOfferFactory trainingOfferFactory;
+    private final EventPublisher eventPublisher;
 
-    TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository, TrainingOfferFactory trainingOfferFactory) {
+    TrainingOfferApplicationService(
+            TrainingOfferRepository trainingOfferRepository, TrainingOfferFactory trainingOfferFactory, EventPublisher eventPublisher) {
         this.trainingOfferRepository = trainingOfferRepository;
         this.trainingOfferFactory = trainingOfferFactory;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -38,7 +42,7 @@ public class TrainingOfferApplicationService {
     public void publish(UUID id) {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
 
-        trainingOffer.publish();
+        trainingOffer.publish(eventPublisher);
 
         trainingOfferRepository.update(trainingOffer);
     }

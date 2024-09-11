@@ -21,4 +21,8 @@ public class Price {
 
         throw new PriceException(price);
     }
+
+    BigDecimal value() {
+        return value;
+    }
 }

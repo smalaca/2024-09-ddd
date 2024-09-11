@@ -3,6 +3,8 @@ package com.smalaca.trainingoffer.domain.trainingoffer;
 import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
 import com.smalaca.annotation.ddd.Factory;
+import com.smalaca.trainingoffer.domain.eventpublished.EventPublisher;
+import com.smalaca.trainingoffer.domain.trainingoffer.events.TrainingOfferPublishedEvent;
 
 import java.util.UUID;
 
@@ -14,7 +16,6 @@ public class TrainingOffer {
     private final Price price;
     private final GroupSize groupSize;
     private final Location location;
-    private boolean isPublished;
 
     private TrainingOffer(Builder builder) {
         trainerId = builder.trainerId;
@@ -26,8 +27,13 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void publish() {
-        isPublished = true;
+    public void publish(EventPublisher eventPublisher) {
+        TrainingOfferPublishedEvent event = new TrainingOfferPublishedEvent(
+                trainerId,
+                trainingProgramId,
+                price.value());
+
+        eventPublisher.publish(event);
     }
 
     @Factory
