@@ -18,18 +18,23 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void buy(ParticipantName participantName, PaymentMethod paymentMethod) {
-        Participant found = reservations.stream()
-                .filter(participant -> participant.hasName(participantName))
-                .findFirst()
-                .get();
+        Participant participant = findReservation(participantName);
 
-        reservations.remove(found);
-        participants.add(found);
+        reservations.remove(participant);
+        participants.add(participant);
     }
 
     @PrimaryPort
-    public void cancelReservation() {
+    public void cancelReservation(ParticipantName participantName) {
+        Participant participant = findReservation(participantName);
+        reservations.remove(participant);
+    }
 
+    private Participant findReservation(ParticipantName participantName) {
+        return reservations.stream()
+                .filter(participant -> participant.hasName(participantName))
+                .findFirst()
+                .get();
     }
 
     @PrimaryPort

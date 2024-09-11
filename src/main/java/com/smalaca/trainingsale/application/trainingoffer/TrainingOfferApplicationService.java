@@ -40,10 +40,11 @@ public class TrainingOfferApplicationService {
     }
 
     @PrimaryAdapter
-    public void cancelReservation(UUID id) {
-        TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
+    public void cancelReservation(CancelReservationDto dto) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
+        ParticipantName participantName = new ParticipantName(dto.firstName(), dto.lastName());
 
-        trainingOffer.cancelReservation();
+        trainingOffer.cancelReservation(participantName);
 
         trainingOfferRepository.update(trainingOffer);
     }

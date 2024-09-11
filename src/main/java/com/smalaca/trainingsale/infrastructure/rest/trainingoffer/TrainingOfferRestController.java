@@ -1,6 +1,7 @@
 package com.smalaca.trainingsale.infrastructure.rest.trainingoffer;
 
 import com.smalaca.trainingsale.application.trainingoffer.BuyTrainingOfferDto;
+import com.smalaca.trainingsale.application.trainingoffer.CancelReservationDto;
 import com.smalaca.trainingsale.application.trainingoffer.ChooseTrainingOfferDto;
 import com.smalaca.trainingsale.application.trainingoffer.TrainingOfferApplicationService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +30,9 @@ public class TrainingOfferRestController {
         trainingOfferApplicationService.buy(dto);
     }
 
-    @PutMapping("cancel-reservation/{id}")
-    private void cancelReservation(@PathVariable UUID id) {
-        trainingOfferApplicationService.cancelReservation(id);
+    @PutMapping("cancel-reservation")
+    private void cancelReservation(CancelReservationDto dto) {
+        trainingOfferApplicationService.cancelReservation(dto);
     }
 
     @PutMapping("resign/{id}")
