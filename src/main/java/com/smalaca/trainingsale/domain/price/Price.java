@@ -1,18 +1,18 @@
-package com.smalaca.trainingsale.domain.trainingoffer;
+package com.smalaca.trainingsale.domain.price;
 
 import com.smalaca.annotation.ddd.ValueObject;
 
 import java.math.BigDecimal;
 
 @ValueObject
-class Price {
+public class Price {
     private final BigDecimal value;
 
     Price(BigDecimal value) {
         this.value = value;
     }
 
-    BigDecimal value() {
+    public BigDecimal value() {
         return value;
     }
 }

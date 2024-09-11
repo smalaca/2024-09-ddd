@@ -1,6 +1,7 @@
 package com.smalaca.trainingsale.domain.trainingoffer;
 
 import com.smalaca.annotation.ddd.DomainEntity;
+import com.smalaca.trainingsale.domain.participant.Participant;
 
 import java.util.ArrayList;
 import java.util.List;

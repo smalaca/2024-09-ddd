@@ -2,10 +2,14 @@ package com.smalaca.trainingsale.domain.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
+import com.smalaca.annotation.ddd.Factory;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
+import com.smalaca.trainingsale.domain.participant.Participant;
 import com.smalaca.trainingsale.domain.payment.PaymentRequest;
 import com.smalaca.trainingsale.domain.payment.PaymentService;
 import com.smalaca.trainingsale.domain.payment.PaymentStatus;
+import com.smalaca.trainingsale.domain.price.Price;
+import com.smalaca.trainingsale.domain.reservation.Reservation;
 import com.smalaca.trainingsale.domain.trainingoffer.events.ResignedFromTrainingEvent;
 
 import java.util.UUID;
@@ -26,32 +30,35 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void choose(Participant participant) {
-        if (isOfferOpen()) {
-            if (trainingGroup.hasAvailablePlaces()) {
-                trainingGroup.book(participant);
-            } else if (reservationList.hasAvailablePlaces()) {
-                reservationList.add(participant);
-            } else {
-                throw new NoAvailablePlacesLeftException(trainingOfferId);
-            }
-        } else {
+    @Factory
+    public Reservation choose(Participant participant) {
+        if (isOfferClosed()) {
             throw new ClosedTrainingOfferException(trainingOfferId);
         }
+
+        if (trainingGroup.hasAvailablePlaces()) {
+            trainingGroup.book(participant);
+        } else if (reservationList.hasAvailablePlaces()) {
+            reservationList.add(participant);
+        } else {
+            throw new NoAvailablePlacesLeftException(trainingOfferId);
+        }
+
+        return new Reservation(trainingOfferId, price, participant);
     }
 
     @PrimaryPort
     public void buy(Participant participant, PaymentMethod paymentMethod, PaymentService paymentService) {
-        if (isOfferOpen()) {
-            PaymentStatus status = paymentService.pay(asPayment(participant, paymentMethod));
-
-            if (status.successful()) {
-                trainingGroup.confirm(participant);
-            } else {
-                trainingGroup.resign(participant);
-            }
-        } else {
+        if (isOfferClosed()) {
             throw new ClosedTrainingOfferException(trainingOfferId);
+        }
+
+        PaymentStatus status = paymentService.pay(asPayment(participant, paymentMethod));
+
+        if (status.successful()) {
+            trainingGroup.confirm(participant);
+        } else {
+            trainingGroup.resign(participant);
         }
     }
 
@@ -80,12 +87,10 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void start() {
-        if (!isOfferOpen()) {
-            isFinalized = true;
-        }
+        isFinalized = true;
     }
 
-    private boolean isOfferOpen() {
+    private boolean isOfferClosed() {
         return false;
     }
 }

@@ -1,4 +1,4 @@
-package com.smalaca.trainingsale.domain.trainingoffer;
+package com.smalaca.trainingsale.domain.participant;
 
 import com.smalaca.annotation.ddd.ValueObject;
 
@@ -12,15 +12,15 @@ public class Participant {
         this.lastName = lastName;
     }
 
-    boolean isSameAs(Participant participant) {
+    public boolean isSameAs(Participant participant) {
         return firstName.equals(participant.firstName) && lastName.equals(participant.lastName);
     }
 
-    String firstName() {
+    public String firstName() {
         return firstName;
     }
 
-    String lastName() {
+    public String lastName() {
         return lastName;
     }
 }

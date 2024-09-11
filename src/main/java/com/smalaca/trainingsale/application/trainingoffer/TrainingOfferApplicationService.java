@@ -3,7 +3,9 @@ package com.smalaca.trainingsale.application.trainingoffer;
 import com.smalaca.annotation.architecture.PrimaryAdapter;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
 import com.smalaca.trainingsale.domain.payment.PaymentService;
-import com.smalaca.trainingsale.domain.trainingoffer.Participant;
+import com.smalaca.trainingsale.domain.reservation.Reservation;
+import com.smalaca.trainingsale.domain.reservation.ReservationRepository;
+import com.smalaca.trainingsale.domain.participant.Participant;
 import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOfferRepository;
@@ -14,12 +16,15 @@ import java.util.UUID;
 @Service
 public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
+    private final ReservationRepository reservationRepository;
     private final EventPublisher eventPublisher;
     private final PaymentService paymentService;
 
     public TrainingOfferApplicationService(
-            TrainingOfferRepository trainingOfferRepository, EventPublisher eventPublisher, PaymentService paymentService) {
+            TrainingOfferRepository trainingOfferRepository, ReservationRepository reservationRepository,
+            EventPublisher eventPublisher, PaymentService paymentService) {
         this.trainingOfferRepository = trainingOfferRepository;
+        this.reservationRepository = reservationRepository;
         this.eventPublisher = eventPublisher;
         this.paymentService = paymentService;
     }
@@ -29,8 +34,9 @@ public class TrainingOfferApplicationService {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
         Participant participant = new Participant(dto.firstName(), dto.lastName());
 
-        trainingOffer.choose(participant);
+        Reservation reservation = trainingOffer.choose(participant);
 
+        reservationRepository.save(reservation);
         trainingOfferRepository.update(trainingOffer);
     }
 
