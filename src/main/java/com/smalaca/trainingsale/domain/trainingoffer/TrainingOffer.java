@@ -5,9 +5,6 @@ import com.smalaca.annotation.ddd.AggregateRoot;
 import com.smalaca.annotation.ddd.Factory;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
 import com.smalaca.trainingsale.domain.participant.Participant;
-import com.smalaca.trainingsale.domain.payment.PaymentRequest;
-import com.smalaca.trainingsale.domain.payment.PaymentService;
-import com.smalaca.trainingsale.domain.payment.PaymentStatus;
 import com.smalaca.trainingsale.domain.price.Price;
 import com.smalaca.trainingsale.domain.reservation.Reservation;
 import com.smalaca.trainingsale.domain.trainingoffer.events.ResignedFromTrainingEvent;
@@ -48,28 +45,8 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void buy(Participant participant, PaymentMethod paymentMethod, PaymentService paymentService) {
-        if (isOfferClosed()) {
-            throw new ClosedTrainingOfferException(trainingOfferId);
-        }
-
-        PaymentStatus status = paymentService.pay(asPayment(participant, paymentMethod));
-
-        if (status.successful()) {
-            trainingGroup.confirm(participant);
-        } else {
-            trainingGroup.resign(participant);
-        }
-    }
-
-    private PaymentRequest asPayment(Participant participant, PaymentMethod paymentMethod) {
-        return new PaymentRequest(
-                paymentMethod.name(),
-                trainingOfferId,
-                participant.firstName(),
-                participant.lastName(),
-                price.value()
-        );
+    public void confirmFor(Participant participant) {
+        trainingGroup.confirm(participant);
     }
 
     @PrimaryPort

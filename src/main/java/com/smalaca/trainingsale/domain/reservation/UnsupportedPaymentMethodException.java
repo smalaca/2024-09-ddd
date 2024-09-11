@@ -1,4 +1,4 @@
-package com.smalaca.trainingsale.domain.trainingoffer;
+package com.smalaca.trainingsale.domain.reservation;
 
 class UnsupportedPaymentMethodException extends RuntimeException{
     private final String value;

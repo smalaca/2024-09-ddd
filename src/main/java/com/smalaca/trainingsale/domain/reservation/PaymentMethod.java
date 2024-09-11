@@ -1,4 +1,4 @@
-package com.smalaca.trainingsale.domain.trainingoffer;
+package com.smalaca.trainingsale.domain.reservation;
 
 import com.smalaca.annotation.ddd.ValueObject;
 

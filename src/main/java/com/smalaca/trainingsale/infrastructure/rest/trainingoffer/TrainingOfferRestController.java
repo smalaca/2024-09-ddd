@@ -1,6 +1,5 @@
 package com.smalaca.trainingsale.infrastructure.rest.trainingoffer;
 
-import com.smalaca.trainingsale.application.trainingoffer.BuyTrainingOfferDto;
 import com.smalaca.trainingsale.application.trainingoffer.CancelReservationDto;
 import com.smalaca.trainingsale.application.trainingoffer.ChooseTrainingOfferDto;
 import com.smalaca.trainingsale.application.trainingoffer.ResignFromTrainingDto;
@@ -24,11 +23,6 @@ public class TrainingOfferRestController {
     @PutMapping("choose")
     private void choose(ChooseTrainingOfferDto dto) {
         trainingOfferApplicationService.choose(dto);
-    }
-
-    @PutMapping("buy")
-    private void buy(BuyTrainingOfferDto dto) {
-        trainingOfferApplicationService.buy(dto);
     }
 
     @PutMapping("cancel-reservation")

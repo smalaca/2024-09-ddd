@@ -2,11 +2,10 @@ package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
-import com.smalaca.trainingsale.domain.payment.PaymentService;
+import com.smalaca.trainingsale.domain.participant.Participant;
 import com.smalaca.trainingsale.domain.reservation.Reservation;
 import com.smalaca.trainingsale.domain.reservation.ReservationRepository;
-import com.smalaca.trainingsale.domain.participant.Participant;
-import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
+import com.smalaca.trainingsale.domain.reservation.events.TrainingOfferPaidEvent;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOfferRepository;
 import org.springframework.stereotype.Service;
@@ -18,15 +17,12 @@ public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
     private final ReservationRepository reservationRepository;
     private final EventPublisher eventPublisher;
-    private final PaymentService paymentService;
 
     public TrainingOfferApplicationService(
-            TrainingOfferRepository trainingOfferRepository, ReservationRepository reservationRepository,
-            EventPublisher eventPublisher, PaymentService paymentService) {
+            TrainingOfferRepository trainingOfferRepository, ReservationRepository reservationRepository, EventPublisher eventPublisher) {
         this.trainingOfferRepository = trainingOfferRepository;
         this.reservationRepository = reservationRepository;
         this.eventPublisher = eventPublisher;
-        this.paymentService = paymentService;
     }
 
     @PrimaryAdapter
@@ -41,12 +37,11 @@ public class TrainingOfferApplicationService {
     }
 
     @PrimaryAdapter
-    public void buy(BuyTrainingOfferDto dto) {
-        TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
-        Participant participant = new Participant(dto.firstName(), dto.lastName());
-        PaymentMethod paymentMethod = PaymentMethod.of(dto.paymentMethod());
+    public void confirmPayment(TrainingOfferPaidEvent event) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(event.trainingOfferId());
+        Participant participant = new Participant(event.firstName(), event.lastName());
 
-        trainingOffer.buy(participant, paymentMethod, paymentService);
+        trainingOffer.confirmFor(participant);
 
         trainingOfferRepository.update(trainingOffer);
     }
