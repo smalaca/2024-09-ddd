@@ -4,5 +4,5 @@ import com.smalaca.annotation.architecture.SecondaryPort;
 
 @SecondaryPort
 public interface PaymentService {
-    PaymentStatus pay(PaymentRequest paymentDto);
+    PaymentStatus pay(PaymentDto paymentDto);
 }

@@ -4,7 +4,7 @@ import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
 import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
 import com.smalaca.trainingsale.domain.participant.Participant;
-import com.smalaca.trainingsale.domain.payment.PaymentRequest;
+import com.smalaca.trainingsale.domain.payment.PaymentDto;
 import com.smalaca.trainingsale.domain.payment.PaymentService;
 import com.smalaca.trainingsale.domain.payment.PaymentStatus;
 import com.smalaca.trainingsale.domain.price.Price;
@@ -41,8 +41,8 @@ public class Reservation {
         return false;
     }
 
-    private PaymentRequest asPayment(PaymentMethod paymentMethod) {
-        return new PaymentRequest(
+    private PaymentDto asPayment(PaymentMethod paymentMethod) {
+        return new PaymentDto(
                 paymentMethod.name(),
                 trainingOfferId,
                 participant.firstName(),
