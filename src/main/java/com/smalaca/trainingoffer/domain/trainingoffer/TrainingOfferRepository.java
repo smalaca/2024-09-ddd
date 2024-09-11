@@ -9,4 +9,8 @@ import java.util.UUID;
 @SecondaryPort
 public interface TrainingOfferRepository {
     UUID save(TrainingOffer trainingOffer);
+
+    TrainingOffer findById(UUID id);
+
+    void update(TrainingOffer trainingOffer);
 }

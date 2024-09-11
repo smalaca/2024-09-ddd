@@ -1,5 +1,6 @@
 package com.smalaca.trainingoffer.domain.trainingoffer;
 
+import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
 import com.smalaca.annotation.ddd.Factory;
 
@@ -13,6 +14,7 @@ public class TrainingOffer {
     private final Price price;
     private final GroupSize groupSize;
     private final Location location;
+    private boolean isPublished;
 
     private TrainingOffer(Builder builder) {
         trainerId = builder.trainerId;
@@ -21,6 +23,11 @@ public class TrainingOffer {
         price = builder.price;
         groupSize = builder.groupSize;
         location = builder.location;
+    }
+
+    @PrimaryPort
+    public void publish() {
+        isPublished = true;
     }
 
     @Factory

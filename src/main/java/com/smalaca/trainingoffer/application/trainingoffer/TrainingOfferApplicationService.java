@@ -30,4 +30,14 @@ public class TrainingOfferApplicationService {
         // 3. zapisanie wyników: 1 ... *
         return trainingOfferRepository.save(trainingOffer);
     }
+
+    @Transactional
+    @PrimaryAdapter
+    public void publish(UUID id) {
+        TrainingOffer trainingOffer = trainingOfferRepository.findById(id);
+
+        trainingOffer.publish();
+
+        trainingOfferRepository.update(trainingOffer);
+    }
 }
