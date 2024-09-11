@@ -15,4 +15,12 @@ public class Participant {
     boolean isSameAs(Participant participant) {
         return firstName.equals(participant.firstName) && lastName.equals(participant.lastName);
     }
+
+    String firstName() {
+        return firstName;
+    }
+
+    String lastName() {
+        return lastName;
+    }
 }

@@ -1,6 +1,7 @@
 package com.smalaca.trainingsale.application.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryAdapter;
+import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
 import com.smalaca.trainingsale.domain.trainingoffer.Participant;
 import com.smalaca.trainingsale.domain.trainingoffer.PaymentMethod;
 import com.smalaca.trainingsale.domain.trainingoffer.TrainingOffer;
@@ -12,9 +13,11 @@ import java.util.UUID;
 @Service
 public class TrainingOfferApplicationService {
     private final TrainingOfferRepository trainingOfferRepository;
+    private final EventPublisher eventPublisher;
 
-    public TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository) {
+    public TrainingOfferApplicationService(TrainingOfferRepository trainingOfferRepository, EventPublisher eventPublisher) {
         this.trainingOfferRepository = trainingOfferRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @PrimaryAdapter
@@ -53,7 +56,7 @@ public class TrainingOfferApplicationService {
         TrainingOffer trainingOffer = trainingOfferRepository.findById(dto.trainingId());
         Participant participant = new Participant(dto.firstName(), dto.lastName());
 
-        trainingOffer.resign(participant);
+        trainingOffer.resign(participant, eventPublisher);
 
         trainingOfferRepository.update(trainingOffer);
     }

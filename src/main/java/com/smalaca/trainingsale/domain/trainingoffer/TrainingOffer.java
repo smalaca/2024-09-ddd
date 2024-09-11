@@ -2,6 +2,8 @@ package com.smalaca.trainingsale.domain.trainingoffer;
 
 import com.smalaca.annotation.architecture.PrimaryPort;
 import com.smalaca.annotation.ddd.AggregateRoot;
+import com.smalaca.trainingsale.domain.eventpublisher.EventPublisher;
+import com.smalaca.trainingsale.domain.trainingoffer.events.ResignedFromTrainingEvent;
 
 import java.util.UUID;
 
@@ -48,8 +50,11 @@ public class TrainingOffer {
     }
 
     @PrimaryPort
-    public void resign(Participant participant) {
+    public void resign(Participant participant, EventPublisher eventPublisher) {
         trainingGroup.resign(participant);
+
+        ResignedFromTrainingEvent event = new ResignedFromTrainingEvent(trainingOfferId, participant.firstName(), participant.lastName());
+        eventPublisher.publish(event);
     }
 
     @PrimaryPort
