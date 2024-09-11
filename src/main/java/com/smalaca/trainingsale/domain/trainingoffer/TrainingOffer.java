@@ -8,8 +8,8 @@ import java.util.UUID;
 @AggregateRoot
 public class TrainingOffer {
     private final UUID trainingOfferId;
-    private final ReservationList reservationList;
     private final TrainingGroup trainingGroup;
+    private final ReservationList reservationList;
     private boolean isFinalized;
 
     TrainingOffer(UUID trainingOfferId, ReservationList reservationList, TrainingGroup trainingGroup) {
@@ -22,6 +22,8 @@ public class TrainingOffer {
     public void choose(Participant participant) {
         if (isOfferOpen()) {
             if (trainingGroup.hasAvailablePlaces()) {
+                trainingGroup.book(participant);
+            } else if (reservationList.hasAvailablePlaces()) {
                 reservationList.add(participant);
             }
         } else {
@@ -31,18 +33,17 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void buy(Participant participant, PaymentMethod paymentMethod) {
-        reservationList.remove(participant);
-        trainingGroup.add(participant);
+        trainingGroup.confirm(participant);
     }
 
     @PrimaryPort
     public void cancelReservation(Participant participant) {
-        reservationList.remove(participant);
+        trainingGroup.cancelBooking(participant);
     }
 
     @PrimaryPort
     public void resign(Participant participant) {
-        trainingGroup.remove(participant);
+        trainingGroup.resign(participant);
     }
 
     @PrimaryPort

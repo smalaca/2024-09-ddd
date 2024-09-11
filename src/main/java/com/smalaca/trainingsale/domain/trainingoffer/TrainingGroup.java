@@ -9,6 +9,7 @@ import java.util.List;
 class TrainingGroup {
     private final int maxParticipantsNumber;
     private final List<Participant> participants = new ArrayList<>();
+    private final List<Participant> bookings = new ArrayList<>();
 
     TrainingGroup(int maxParticipantsNumber) {
         this.maxParticipantsNumber = maxParticipantsNumber;
@@ -31,6 +32,23 @@ class TrainingGroup {
     }
 
     boolean hasAvailablePlaces() {
-        return participants.size() < maxParticipantsNumber;
+        return (bookings.size() + participants.size()) < maxParticipantsNumber;
+    }
+
+    void book(Participant participant) {
+        bookings.add(participant);
+    }
+
+    void cancelBooking(Participant participant) {
+        bookings.remove(participant);
+    }
+
+    void confirm(Participant participant) {
+        bookings.remove(participant);
+        participants.add(participant);
+    }
+
+    void resign(Participant participant) {
+        participants.remove(participant);
     }
 }

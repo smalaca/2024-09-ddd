@@ -7,21 +7,18 @@ import java.util.List;
 
 @DomainEntity
 class ReservationList {
+    private final int maxReservationsNumber;
     private final List<Participant> participants = new ArrayList<>();
+
+    ReservationList(int maxReservationsNumber) {
+        this.maxReservationsNumber = maxReservationsNumber;
+    }
 
     void add(Participant participant) {
         participants.add(participant);
     }
 
-    void remove(Participant participant) {
-        Participant existing = find(participant);
-        participants.remove(existing);
-    }
-
-    private Participant find(Participant participant) {
-        return participants.stream()
-                .filter(existing -> existing.isSameAs(participant))
-                .findFirst()
-                .get();
+    boolean hasAvailablePlaces() {
+        return participants.size() < maxReservationsNumber;
     }
 }
