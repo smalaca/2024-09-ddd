@@ -29,7 +29,5 @@ public class ReservationApplicationService {
         PaymentMethod paymentMethodVO = PaymentMethod.of(paymentMethod);
 
         reservation.buy(paymentMethodVO, paymentService, eventPublisher);
-
-        reservationRepository.update(reservation);
     }
 }
