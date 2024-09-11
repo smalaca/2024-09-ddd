@@ -10,6 +10,7 @@ import java.util.List;
 public class TrainingOffer {
     private final List<Participant> reservations = new ArrayList<>();
     private final List<Participant> participants = new ArrayList<>();
+    private boolean isFinalized;
 
     @PrimaryPort
     public void choose(Participant participant) {
@@ -44,6 +45,6 @@ public class TrainingOffer {
 
     @PrimaryPort
     public void start() {
-
+        isFinalized = true;
     }
 }
