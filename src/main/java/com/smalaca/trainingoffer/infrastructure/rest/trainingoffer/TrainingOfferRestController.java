@@ -1,5 +1,6 @@
 package com.smalaca.trainingoffer.infrastructure.rest.trainingoffer;
 
+import com.smalaca.trainingoffer.application.trainingoffer.CreateTrainingOfferDto;
 import com.smalaca.trainingoffer.application.trainingoffer.TrainingOfferApplicationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class TrainingOfferRestController {
     }
 
     @PostMapping
-    public UUID create() {
-        return trainingOfferApplicationService.create();
+    public UUID create(CreateTrainingOfferDto dto) {
+        return trainingOfferApplicationService.create(dto);
     }
 }
